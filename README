@@ -1,13 +1,28 @@
-Actionhelper
+ActionHelper
 ============
 
-Introduction goes here.
-
+ActionHelper is a Rails plugin that allows you to create view helper modules 
+for specific actions or templates, as oppose to the controller-wide helper 
+facility Rails provides.  
 
 Example
 =======
 
-Example goes here.
+class ExampleController < ActionController::Base
+  include ActionHelper
+  
+  def sweetness()
+    ...
+  end
+  
+end
 
+The ActionView::Base object that renders the response for the #sweetness 
+action will have ExampleSweetnessHelper mixed in, if the module exists.
 
-Copyright (c) 2008 [name of plugin creator], released under the MIT license
+TODO
+====
+
+Almost everything ... this is super-alpha.
+
+Copyright (c) 2008 John D. Hume, released under the MIT license
