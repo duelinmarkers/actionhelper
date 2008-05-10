@@ -33,23 +33,23 @@ describe ActionHelper do
   
   it "has template extend helper with matching name when that module exists" do
     do_action 'action_helped_by_naming_convention'
-    response.template.should be_a(FakeActionHelpedByNamingConventionHelper)
+    response.template.should be_a_kind_of(FakeActionHelpedByNamingConventionHelper)
   end
   
   it "allows an action to specify a helper to mix in" do
     do_action 'action_specifying_helper'
-    response.template.should be_a(OtherHelper)
+    response.template.should be_a_kind_of(OtherHelper)
   end
   
   it "allows an action to specify multiple helpers to mix in" do
     do_action 'action_specifying_multiple_helpers'
-    response.template.should be_a(OtherHelper)
-    response.template.should be_a(FakeActionHelpedByNamingConventionHelper)
+    response.template.should be_a_kind_of(OtherHelper)
+    response.template.should be_a_kind_of(FakeActionHelpedByNamingConventionHelper)
   end
   
   it "doesn't mix in the helper when the names don't match" do
     do_action 'non_helped_action'
-    response.template.should_not be_a(FakeActionHelpedByNamingConventionHelper)
+    response.template.should_not be_a_kind_of(FakeActionHelpedByNamingConventionHelper)
   end
   
   def do_action action
@@ -58,9 +58,5 @@ describe ActionHelper do
   
   def response
     @controller.response
-  end
-  
-  def be_a modul
-    be_is_a modul
   end
 end
