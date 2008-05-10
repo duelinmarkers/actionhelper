@@ -15,6 +15,10 @@ end
 class FakeController < FakeActionControllerBase
   include ActionHelper
   def action_helped_by_naming_convention; end
+  def action_specifying_helper; action_helper OtherHelper
+  end
+  def action_specifying_multiple_helpers; action_helper OtherHelper, FakeActionHelpedByNamingConventionHelper
+  end
   def non_helped_action; end
 end
 
@@ -29,6 +33,17 @@ describe ActionHelper do
   
   it "has template extend helper with matching name when that module exists" do
     do_action 'action_helped_by_naming_convention'
+    response.template.should be_a(FakeActionHelpedByNamingConventionHelper)
+  end
+  
+  it "allows an action to specify a helper to mix in" do
+    do_action 'action_specifying_helper'
+    response.template.should be_a(OtherHelper)
+  end
+  
+  it "allows an action to specify multiple helpers to mix in" do
+    do_action 'action_specifying_multiple_helpers'
+    response.template.should be_a(OtherHelper)
     response.template.should be_a(FakeActionHelpedByNamingConventionHelper)
   end
   

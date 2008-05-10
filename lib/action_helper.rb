@@ -4,6 +4,10 @@ module ActionHelper
     klass.extend ClassMethods
   end
   
+  def action_helper *args
+    args.each {|helper| response.template.extend helper }
+  end
+  
   private
 
   def render_for_file *args

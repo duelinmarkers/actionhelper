@@ -8,6 +8,10 @@ facility Rails provides.
 Example
 =======
 
+There are currently two ways to get action-specific helpers mixed in.
+
+module ExampleSweetnessHelper ... end
+
 class ExampleController < ActionController::Base
   include ActionHelper
   
@@ -15,16 +19,26 @@ class ExampleController < ActionController::Base
     ...
   end
   
+  def supercool; action_helper ExampleSweetnessHelper
+    ...
+  end
 end
 
-The ActionView::Base object that renders the response for the #sweetness 
-action will have ExampleSweetnessHelper mixed in, if the module exists.
+Because of a naming convention similar to Rails' built in helper support, the 
+template object that renders the response for the #sweetness action will have 
+ExampleSweetnessHelper mixed in.  (To be clear, when processing 
+FooController#bar, ActionHelper will look for FooBarHelper.)
+
+By calling #action_helper, the #supercool action gets ExampleSweetnessHelper 
+for its template too.
 
 TODO
 ====
 
-Almost everything ... this is super-alpha.
-* Allow an action to declare what helper(s) it wants beyond the default
+* Allow an action to declare what helper(s) it wants by name in addition to 
+  passing the module itself (same as Rails does).
+* Build up a master module for each action so we're not doing so many extends 
+  on every request.
 * Experiment with keying off the template name rather than the action (to deal 
   with actions that might render alternate templates)
 
