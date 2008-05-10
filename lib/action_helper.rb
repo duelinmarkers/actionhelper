@@ -4,8 +4,8 @@ module ActionHelper
     klass.extend ClassMethods
   end
   
-  def action_helper *args
-    args.each {|helper| response.template.extend helper }
+  def action_helper *helper_modules
+    helper_modules.each {|helper| response.template.extend helper }
   end
   
   private
@@ -16,22 +16,22 @@ module ActionHelper
   end
   
   def extend_if_necessary
-    action_module = self.class.master_action_helper_for(action_name)
+    action_module = self.class.action_helper_for(action_name)
     unless action_module == :no_action_helper
       response.template.extend action_module
     end
   end
   
   module ClassMethods
-    def master_action_helpers
+    def action_helpers
       @master_action_helpers ||= {}
     end
     
-    def master_action_helper_for action_name
-      master_action_helpers[action_name] ||= build_master_action_helper_for action_name
+    def action_helper_for action_name
+      action_helpers[action_name] ||= build_action_helper_for action_name
     end
     
-    def build_master_action_helper_for action_name
+    def build_action_helper_for action_name
       controller_part = self.name.sub(/Controller$/, '')
       action_part = action_name.camelize
       "#{controller_part}#{action_part}Helper".constantize
