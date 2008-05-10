@@ -5,6 +5,7 @@ class FakeActionControllerBase
   def fake_process action_name
     @action_name = action_name
     @response = Struct.new(:template).new(Object.new)
+    send action_name
     render_for_file :some, :args
   end
   def render_for_file *args
@@ -13,20 +14,34 @@ end
 
 class FakeController < FakeActionControllerBase
   include ActionHelper
+  def action_helped_by_naming_convention; end
+  def non_helped_action; end
 end
 
-module FakeHelpedActionHelper end
+module FakeActionHelpedByNamingConventionHelper end
+
+module OtherHelper end
 
 describe ActionHelper do
-  it "has template extend helper when helper module exists" do
-    controller = FakeController.new
-    controller.fake_process 'helped_action'
-    controller.response.template.should be_is_a(FakeHelpedActionHelper)
+  before :each do
+    @controller = FakeController.new
   end
   
-  it "doesn't blow up when helper module doesn't exist" do
-    controller = FakeController.new
-    controller.fake_process 'non_helped_action'
-    controller.response.template.should_not be_is_a(FakeHelpedActionHelper)
+  it "has template extend helper with matching name when that module exists" do
+    do_action 'action_helped_by_naming_convention'
+    response.template.is_a?(FakeActionHelpedByNamingConventionHelper).should be_true
+  end
+  
+  it "doesn't mix in the helper when the names don't match" do
+    do_action 'non_helped_action'
+    response.template.is_a?(FakeActionHelpedByNamingConventionHelper).should be_false
+  end
+  
+  def do_action action
+    @controller.fake_process action
+  end
+  
+  def response
+    @controller.response
   end
 end

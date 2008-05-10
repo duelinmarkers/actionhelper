@@ -11,7 +11,7 @@ Example
 class ExampleController < ActionController::Base
   include ActionHelper
   
-  def sweetness()
+  def sweetness
     ...
   end
   
@@ -24,5 +24,9 @@ TODO
 ====
 
 Almost everything ... this is super-alpha.
+* Allow an action to declare what helper(s) it wants beyond the default
+* Experiment with keying off the template name rather than the action (to deal 
+  with actions that might render alternate templates)
+
 
 Copyright (c) 2008 John D. Hume, released under the MIT license
