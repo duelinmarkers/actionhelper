@@ -37,10 +37,12 @@ TODO
 
 * Allow an action to declare what helper(s) it wants by name in addition to 
   passing the module itself (same as Rails does).
-* Build up a master module for each action so we're not doing so many extends 
-  on every request.
 * Experiment with keying off the template name rather than the action (to deal 
   with actions that might render alternate templates)
+* Build up a master module for each action so we're not doing so many extends 
+  on every request.
+* Get things self-contained so specs (including controller specs) run without 
+  a surrounding Rails app.
 
 
 Copyright (c) 2008 John D. Hume, released under the MIT license
