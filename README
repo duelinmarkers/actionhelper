@@ -2,8 +2,9 @@ ActionHelper
 ============
 
 ActionHelper is a Rails plugin that allows you to create view helper modules 
-for specific actions or templates, as oppose to the controller-wide helper 
-facility Rails provides.  
+for specific actions or templates, as opposed to the controller-wide helper 
+facility Rails provides.
+
 
 Example
 =======
@@ -19,29 +20,20 @@ class ExampleController < ActionController::Base
   helper SuperHawtnessHelper, :only => :hawtness
   
   def hawtness
-    ...
+    # Only this action will get SuperHawtnessHelper since the #helper call 
+    # above used the :only option.
   end
   
   def sweetness
-    ...
+    # This action will get ExampleSweetnessHelper because the name matches 
+    # the controller name and action name concatenated.
   end
   
   def supercool; action_helper ExampleSweetnessHelper
-    ...
+    # This action will get ExampleSweetnessHelper because it just said so.
   end
 end
 
-The ActionController::Base#helper class method now accepts an options hash 
-that can include an :only option specifying the actions that use the given 
-helper(s).
-
-Because of a naming convention similar to Rails' built in helper support, the 
-template object that renders the response for the #sweetness action will have 
-ExampleSweetnessHelper mixed in.  (To be clear, when processing 
-FooController#bar, ActionHelper will look for FooBarHelper.)
-
-By calling #action_helper, the #supercool action gets ExampleSweetnessHelper 
-for its template too.
 
 TODO
 ====
