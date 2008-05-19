@@ -23,12 +23,32 @@ module ActionHelper
   end
   
   module ClassMethods
+    def helper *args
+      options = args.last.is_a?(Hash) ? args.pop : nil
+      if options
+        master_action_helper = forced_action_helper_for(options[:only].to_s)
+        args.each do |helper|
+          master_action_helper.module_eval { include helper }
+        end
+      else
+        super
+      end
+    end
+    
     def action_helpers
       @master_action_helpers ||= {}
     end
     
     def action_helper_for action_name
       action_helpers[action_name] ||= build_action_helper_for action_name
+    end
+    
+    def forced_action_helper_for action_name
+      if action_helper_for(action_name) == :no_action_helper
+        action_helpers[action_name] = Module.new
+      else
+        action_helper_for(action_name)
+      end
     end
     
     def build_action_helper_for action_name
