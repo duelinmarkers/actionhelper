@@ -65,9 +65,24 @@ describe ActionHelper do
     end
   end
   
-  describe "#helper declarative class method overloading" do
-    it "mixes in to action named in the :only option" do
+  describe "override of ActionController::Base#helper class method" do
+    it "mixes in to one action named in the :only option" do
       do_action 'action_helped_via_declarative_class_method_with_only'
+      response.template.should be_a_kind_of(OtherHelper)
+    end
+    
+    it "mixes in to each of an array of actions named in the :only option" do
+      class OnlyOptionWithMultipleActionsController < FakeActionControllerBase
+        include ActionHelper
+        helper OtherHelper, :only => [:first_action, :second_action]
+        def first_action; end
+        def second_action; end
+      end
+
+      do_action 'first_action', OnlyOptionWithMultipleActionsController
+      response.template.should be_a_kind_of(OtherHelper)
+
+      do_action 'second_action', OnlyOptionWithMultipleActionsController
       response.template.should be_a_kind_of(OtherHelper)
     end
 
@@ -84,7 +99,8 @@ describe ActionHelper do
     it "doesn't mix in to action named in the except option"
   end
 
-  def do_action action
+  def do_action action, controller_class = nil
+    @controller = controller_class.new if controller_class
     @controller.fake_process action
   end
   

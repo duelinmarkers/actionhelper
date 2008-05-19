@@ -26,9 +26,11 @@ module ActionHelper
     def helper *args
       options = args.last.is_a?(Hash) ? args.pop : nil
       if options
-        master_action_helper = forced_action_helper_for(options[:only].to_s)
-        args.each do |helper|
-          master_action_helper.module_eval { include helper }
+        [options[:only]].flatten.each do |action|
+          master_action_helper = forced_action_helper_for(action.to_s)
+          args.each do |helper|
+            master_action_helper.module_eval { include helper }
+          end
         end
       else
         super
