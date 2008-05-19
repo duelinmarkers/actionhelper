@@ -26,10 +26,8 @@ class FakeController < FakeActionControllerBase
   include ActionHelper
   helper :whatever
   def action_helped_by_naming_convention; end
-  def action_specifying_helper; action_helper OtherHelper
-  end
-  def action_specifying_multiple_helpers; action_helper OtherHelper, FakeActionHelpedByNamingConventionHelper
-  end
+  def action_specifying_helper; action_helper OtherHelper; end
+  def action_specifying_multiple_helpers; action_helper OtherHelper, FakeActionHelpedByNamingConventionHelper; end
   helper OtherHelper, :only => :action_helped_via_declarative_class_method_with_only
   def action_helped_via_declarative_class_method_with_only; end
   helper YetAnotherHelper, :except => :action_helped_via_declarative_class_method_with_except
