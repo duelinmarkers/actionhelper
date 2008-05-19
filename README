@@ -8,12 +8,19 @@ facility Rails provides.
 Example
 =======
 
-There are currently two ways to get action-specific helpers mixed in.
+There are currently three ways to get action-specific helpers mixed in.
 
-module ExampleSweetnessHelper ... end
+module SuperHawtnessHelper end
+module ExampleSweetnessHelper end
 
 class ExampleController < ActionController::Base
   include ActionHelper
+  
+  helper SuperHawtnessHelper, :only => :hawtness
+  
+  def hawtness
+    ...
+  end
   
   def sweetness
     ...
@@ -23,6 +30,10 @@ class ExampleController < ActionController::Base
     ...
   end
 end
+
+The ActionController::Base#helper class method now accepts an options hash 
+that can include an :only option specifying the actions that use the given 
+helper(s).
 
 Because of a naming convention similar to Rails' built in helper support, the 
 template object that renders the response for the #sweetness action will have 
